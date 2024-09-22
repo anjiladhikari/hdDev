@@ -1,0 +1,20 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Demo</title>
+</head>
+<body>
+    <h1>Welcome to DevOps Demo Project</h1>
+    <div id="message"></div>
+    <script>
+        fetch('/api/hello')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+            });
+    </script>
+</body>
+</html>
