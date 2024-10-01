@@ -34,8 +34,8 @@ pipeline {
                 echo 'Releasing to production...'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKERHUB_PASS', usernameVariable: 'DOCKERHUB_USER')]) {
                     sh 'docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS'
-                    sh 'docker tag devops-demo-app:latest your-dockerhub-username/devops-demo-app:latest'
-                    sh 'docker push your-dockerhub-username/devops-demo-app:latest'
+                    sh 'docker tag devops-demo-app:latest $DOCKERHUB_USER/devops-demo-app:latest'
+                    sh 'docker push $DOCKERHUB_USER/devops-demo-app:latest'
                 }
             }
         }
