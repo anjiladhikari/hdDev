@@ -3,9 +3,6 @@ pipeline {
 
     stages {
         stage('Build') {
-            agent {
-                label 'docker-enabled'
-            }
             steps {
                 echo 'Building...'
                 sh 'npm install'
@@ -13,14 +10,14 @@ pipeline {
                 archiveArtifacts artifacts: '**/Dockerfile', allowEmptyArchive: true
             }
         }
-        
+
         stage('Test') {
             steps {
                 echo 'Running tests...'
                 sh 'npm test'
             }
         }
-        
+
         stage('Code Quality Analysis') {
             steps {
                 echo 'Analyzing code quality...'
@@ -31,9 +28,6 @@ pipeline {
         }
 
         stage('Deploy') {
-            agent {
-                label 'docker-enabled'
-            }
             steps {
                 echo 'Deploying to test environment...'
                 sh 'docker-compose up -d'
@@ -41,9 +35,6 @@ pipeline {
         }
 
         stage('Release') {
-            agent {
-                label 'docker-enabled'
-            }
             steps {
                 echo 'Releasing to production...'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKERHUB_PASS', usernameVariable: 'DOCKERHUB_USER')]) {
