@@ -4,52 +4,63 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building...'
-                sh 'npm install'
-                sh 'docker build -t devops-demo-app .'
-                archiveArtifacts artifacts: '**/Dockerfile', allowEmptyArchive: true
+                script {
+                    // Install project dependencies
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                sh 'npm test'
-            }
-        }
-
-        stage('Code Quality Analysis') {
-            steps {
-                echo 'Analyzing code quality...'
-                withSonarQubeEnv('SonarQube') {
-                    sh 'sonar-scanner -Dsonar.projectKey=devops-demo -Dsonar.sources=src -Dsonar.language=js -Dsonar.sourceEncoding=UTF-8'
+                script {
+                    // Run tests using npm (Jest or your chosen framework)
+                    sh 'npm test'
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Code Quality') {
             steps {
-                echo 'Deploying to test environment...'
-                sh 'docker-compose up -d'
-            }
-        }
-
-        stage('Release') {
-            steps {
-                echo 'Releasing to production...'
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKERHUB_PASS', usernameVariable: 'DOCKERHUB_USER')]) {
-                    sh 'docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS'
-                    sh 'docker tag devops-demo-app:latest $DOCKERHUB_USER/devops-demo-app:latest'
-                    sh 'docker push $DOCKERHUB_USER/devops-demo-app:latest'
+                script {
+                    // You can integrate ESLint or other code quality checks
+                    echo 'Running code quality checks...'
+                    sh 'npm run lint' // If you have linting configured in your project
                 }
             }
         }
 
-        stage('Monitoring and Alerting') {
+        stage('Deploy to Test Environment') {
             steps {
-                echo 'Setting up monitoring...'
-                sh 'echo "Monitoring enabled for the production environment"'
+                script {
+                    // Start the application on the test server or environment
+                    echo 'Deploying to Test Environment...'
+                    sh 'nohup npm start &' // nohup allows the app to run in the background
+                }
             }
+        }
+
+        stage('Release to Production') {
+            steps {
+                input message: 'Promote to Production?', ok: 'Release'
+                script {
+                    // Manual promotion to production
+                    echo 'Releasing to Production...'
+                    sh 'nohup npm start &' // Adjust this to your production deployment method
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed.'
+        }
+        success {
+            echo 'Pipeline succeeded.'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
