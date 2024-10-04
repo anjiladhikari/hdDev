@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     sh 'npm install'
-                    sh 'docker build -t your-username/hddev .'
+                    sh 'docker build -t anjiladhikari/hddev .'
                 }
             }
         }
