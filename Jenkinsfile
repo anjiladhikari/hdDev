@@ -5,31 +5,31 @@ pipeline {
         stage('Check Node.js Version') {
             steps {
                 script {
-                    sh 'node -v'  
+                    sh 'node -v'
                 }
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {  // Ensure dependencies are installed
             steps {
                 script {
+                    // Install node dependencies
                     sh 'npm install'
-                    sh 'docker build -t anjiladhikari/hddev .'
                 }
             }
         }
 
-      stage('Test') {
-    steps {
-        script {
-            sh 'npm test'
+        stage('Test') {
+            steps {
+                script {
+                    // Run Jest tests
+                    sh 'npm test'
+                }
+                // Archive test results and coverage reports
+                junit 'coverage/junit.xml'
+            }
         }
-        // Archive test results and coverage reports
-        junit 'coverage/junit.xml'
-    }
-}
 
-    // SonarQube Stage
         stage('Code Quality Analysis') {
             steps {
                 script {
