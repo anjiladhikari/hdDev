@@ -1,6 +1,9 @@
 pipeline {
     agent any
-
+tools {
+        
+        nodejs 'NodeJS 16'  
+    }
     stages {
         stage('Build') {
             steps {
@@ -32,7 +35,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh 'docker run -d -p 80:80 your-username/hddev'
+                    sh 'docker run -d -p 80:80 anjiladhikari/hddev'
                 }
             }
         }
