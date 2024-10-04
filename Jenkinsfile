@@ -1,6 +1,7 @@
 pipeline {
     agent any
- stages {
+
+    stages {
         stage('Check Node.js Version') {
             steps {
                 script {
@@ -8,7 +9,7 @@ pipeline {
                 }
             }
         }
-    stages {
+
         stage('Build') {
             steps {
                 script {
