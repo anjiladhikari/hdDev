@@ -27,11 +27,12 @@ pipeline {
             }
         }
 
+    // SonarQube Stage
         stage('Code Quality Analysis') {
             steps {
                 script {
                     withSonarQubeEnv('SonarQube') {
-                        sh 'sonar-scanner -X'
+                        sh 'sonar-scanner -Dsonar.projectKey=your-project-key -Dsonar.sources=./src -Dsonar.host.url=http://localhost:9000 -Dsonar.login=your-auth-token'
                     }
                 }
             }
