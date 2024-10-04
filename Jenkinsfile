@@ -19,13 +19,15 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                script {
-                     sh 'npm test -- --forceExit'
-                }
-            }
+      stage('Test') {
+    steps {
+        script {
+            sh 'npm test'
         }
+        // Archive test results and coverage reports
+        junit 'coverage/junit.xml'
+    }
+}
 
     // SonarQube Stage
         stage('Code Quality Analysis') {
