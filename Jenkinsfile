@@ -1,9 +1,13 @@
 pipeline {
     agent any
-tools {
-        
-        nodejs 'NodeJS 16'  
-    }
+ stages {
+        stage('Check Node.js Version') {
+            steps {
+                script {
+                    sh 'node -v'  // This will display the Node.js version being used by Jenkins
+                }
+            }
+        }
     stages {
         stage('Build') {
             steps {
