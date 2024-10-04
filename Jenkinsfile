@@ -5,7 +5,7 @@ pipeline {
         stage('Check Node.js Version') {
             steps {
                 script {
-                    sh 'node -v'  // This will display the Node.js version being used by Jenkins
+                    sh 'node -v'  
                 }
             }
         }
