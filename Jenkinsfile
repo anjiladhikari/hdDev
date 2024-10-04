@@ -5,8 +5,8 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'npm install'
-                    sh 'docker build -t anjiladhikari/hddev .'
+                    sh 'sudo npm install'
+                    sh 'sudo docker build -t anjiladhikari/hddev .'
                 }
             }
         }
