@@ -10,26 +10,28 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {  // Ensure dependencies are installed
+        // Build Stage: Install dependencies
+        stage('Build') {
             steps {
                 script {
-                    // Install node dependencies
                     sh 'npm install'
                 }
             }
         }
 
+        // Test Stage: Run Jest tests
         stage('Test') {
             steps {
                 script {
-                    // Run Jest tests
+                    // Run Jest tests with coverage and force exit to avoid hanging
                     sh 'npm test'
                 }
-                // Archive test results and coverage reports
+                // Archive test results (JUnit XML format) for Jenkins
                 junit 'coverage/junit.xml'
             }
         }
 
+        // Code Quality Analysis: Example with SonarQube
         stage('Code Quality Analysis') {
             steps {
                 script {
@@ -40,9 +42,13 @@ pipeline {
             }
         }
 
+        // Deploy Stage: Deploy your Dockerized application
         stage('Deploy') {
             steps {
                 script {
+                    // Build the Docker image
+                    sh 'docker build -t anjiladhikari/hddev .'
+                    // Run the Docker container, mapping port 80 on the host to the container
                     sh 'docker run -d -p 80:80 anjiladhikari/hddev'
                 }
             }
